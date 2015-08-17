@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:padding="16dp"
+    android:descendantFocusability="blocksDescendants"
+    android:layout_height="90dp">
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/image_view"/>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center|left"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/image_view"
+        android:id="@+id/linearLayout"
+        android:layout_toLeftOf="@+id/btnDownload"
+        android:layout_toStartOf="@+id/btnDownload">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="New Text"
+            android:id="@+id/txt_name"
+            android:layout_toRightOf="@+id/image_view" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Last update June 20,2015"
+            android:id="@+id/txt_update"
+            android:layout_toRightOf="@+id/image_view" />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar"
+            android:progress="@integer/status_bar_notification_info_maxnum"
+
+            android:indeterminate="false" />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnDownload"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        style="@android:style/Widget.Button.Small"
+        android:text="Download" />
+
+</RelativeLayout>

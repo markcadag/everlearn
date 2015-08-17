@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--language=SQLite-->
+    <string name="user_name">
+        name
+    </string>
+      <string name="user_email">
+        email
+    </string>
+    <string name="user_photo">
+        photo
+    </string>
+    <string name="user_auth">
+        auth
+    </string>
+
+
+</resources>

@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Everlearn</string>
+
+    <string name="title_section1">Subject List</string>
+    <string name="title_section2">Handout List</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Settings</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="title_activity_pdf_viewer">PdfViewerActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_conceal_test">ConcealTest</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="xlistview_footer_hint_normal">Normal</string>
+    <string name="xlistview_footer_hint_ready">Ready</string>
+    <string name="xlistview_header_hint_normal">Normal</string>
+    <string name="xlistview_header_hint_ready">Ready</string>
+    <string name="xlistview_header_hint_loading">Ready</string>
+    <string name="xlistview_header_last_time">Last Time</string>
+</resources>
