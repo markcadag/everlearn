@@ -20,26 +20,11 @@ public class RestClient
         return restClient;
     }
 
-    private RestClient()
-    {
-
-//        Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
-//            @Override
-//            public boolean shouldSkipField(FieldAttributes f) {
-//                return f.getDeclaredClass().equals(Model);
-//            }
-//
-//            @Override
-//            public boolean shouldSkipClass(Class<?> clazz) {
-//                return false;
-//            }
-//        });
-
+    private RestClient() {
         restAdapter = new RestAdapter.Builder()
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setEndpoint(BASE_URL)
                 .build();
-
         apiService = restAdapter.create(ApiService.class);
 
     }
