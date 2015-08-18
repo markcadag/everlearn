@@ -1,6 +1,7 @@
 package com.everlearning.everlearning;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -11,25 +12,19 @@ import android.widget.SearchView;
 /**
  * Created by selim_tekinarslan on 10.10.2014.
  */
-public class SampleActivity extends Activity {
-    private static final String TAG = "SampleActivity";
-    private static final String SAMPLE_FILE = "sample.pdf";
+public class PdfActivity extends Activity {
+
     private static final String FILE_PATH = "filepath";
-    private static final String SEARCH_TEXT = "text";
     private PdfFragment fragment;
-    private static Context context;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.xlistview_main);
-        context = SampleActivity.this;
-       // openPdfWithFragment();
+        setContentView(R.layout.activity_main);
+        String path = getIntent().getExtras().getString(FILE_PATH);
+        openPdfWithFragment(path);
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -55,13 +50,12 @@ public class SampleActivity extends Activity {
         return super.onCreateOptionsMenu(menu);
     }
 
-//    public void openPdfWithFragment() {
-//        fragment = new PdfFragment();
-//        Bundle args = new Bundle();
-//        args.putString(FILE_PATH, Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + SAMPLE_FILE);
-//        fragment.setArguments(args);
-//        FragmentManager fragmentManager = getFragmentManager();
-//        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-//    }
+    public void openPdfWithFragment(String path) {
+        fragment = new PdfFragment();
+        Bundle args = new Bundle();
+        args.putString(FILE_PATH,path);
+        FragmentManager fragmentManager = getFragmentManager();
+       fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+    }
 
 }
