@@ -211,6 +211,7 @@ public class HandoutListFragment extends Fragment implements AbsListView.OnItemC
           //  Log.i(TAG, "decode ok");
             Intent intent = new Intent(getActivity(), PdfActivity.class);
             intent.putExtra("filepath",file.getPath() );
+            startActivity(intent);
 //        } catch (IOException e) {
   //          e.printStackTrace();
     //    }
