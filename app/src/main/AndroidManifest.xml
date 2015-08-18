@@ -23,13 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SampleActivity" >
-        </activity>
-        <activity
-            android:name=".PdfViewerActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_pdf_viewer"
-            android:theme="@style/FullscreenTheme" >
+        <activity android:name=".PdfActivity" >
         </activity>
         <activity
             android:name=".LoginActivity"
