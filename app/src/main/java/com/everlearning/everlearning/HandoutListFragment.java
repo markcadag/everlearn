@@ -2,6 +2,7 @@ package com.everlearning.everlearning;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
@@ -207,10 +208,9 @@ public class HandoutListFragment extends Fragment implements AbsListView.OnItemC
           //  Log.i(TAG, "encode ok");
 
           //  utils.decode(fileDest, fileDest2, crypto);
-         //   Log.i(TAG, "decode ok");
-            ((MainActivity)getActivity())
-                    .replaceFragment(PdfFragment.newInstance(file.getPath()));
-
+          //  Log.i(TAG, "decode ok");
+            Intent intent = new Intent(getActivity(), PdfActivity.class);
+            intent.putExtra("filepath",file.getPath() );
 //        } catch (IOException e) {
   //          e.printStackTrace();
     //    }
