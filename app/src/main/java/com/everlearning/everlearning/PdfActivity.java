@@ -20,7 +20,7 @@ public class PdfActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_pdf_viewer);
         String path = getIntent().getExtras().getString(FILE_PATH);
         openPdfWithFragment(path);
 
@@ -40,8 +40,7 @@ public class PdfActivity extends Activity {
             }
 
             @Override
-            public boolean onQueryTextSubmit(String query)//burada klavyeden ara ya basiyor user
-            {
+            public boolean onQueryTextSubmit(String query){
                 fragment.search(1, query);
                 return true;
             }
@@ -51,11 +50,10 @@ public class PdfActivity extends Activity {
     }
 
     public void openPdfWithFragment(String path) {
-        fragment = new PdfFragment();
-        Bundle args = new Bundle();
-        args.putString(FILE_PATH,path);
+        fragment = PdfFragment.newInstance(path);
         FragmentManager fragmentManager = getFragmentManager();
-       fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.container,
+                PdfFragment.newInstance(path)).commit();
     }
 
 }
