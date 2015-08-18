@@ -11,32 +11,25 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.SearchView;
 
+import com.everlearning.everlearning.communicator.LoadSubjectEvent;
 import com.everlearning.everlearning.communicator.OnClickList;
 import com.everlearning.everlearning.communicator.OnRefresh;
+import com.everlearning.everlearning.communicator.SubjectsLoadedEvent;
 import com.everlearning.everlearning.db.DatabaseManager;
 import com.everlearning.everlearning.db.QueryExecutor;
-import com.everlearning.everlearning.db.dao.HandoutsDAO;
-import com.everlearning.everlearning.db.dao.SubjectDAO;
 import com.everlearning.everlearning.db.dao.UserDAO;
 import com.everlearning.everlearning.model.Handout;
-import com.everlearning.everlearning.model.Subject;
 import com.everlearning.everlearning.model.User;
-import com.everlearning.everlearning.rest.RestClient;
 import com.facebook.crypto.Crypto;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import de.greenrobot.event.EventBus;
 
 
 public class MainActivity extends Activity
@@ -74,7 +67,6 @@ public class MainActivity extends Activity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-        getSubjects();
         //TODO check if get subject or handout list is on already on request
         //       getHandouts();
 
@@ -100,14 +92,6 @@ public class MainActivity extends Activity
 //        }
     }
 
-    private void getRunningRequest(){
-
-    }
-
-    private void setRunningRequest(){
-
-    }
-
     public void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
@@ -124,49 +108,6 @@ public class MainActivity extends Activity
                 .commit();
     }
 
-
-    public void getSubjects() {
-        RestClient.getInstance().getApiService().listSubjects("mark",
-                new Callback<List<Subject>>() {
-                    @Override
-                    public void success(List<Subject> subjects, Response response) {
-                        insertDataSubjects(subjects);
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Log.e(TAG, error.toString());
-                    }
-                });
-        Log.i(TAG, "getting subjects");
-    }
-
-    public void getHandouts() {
-        RestClient.getInstance().getApiService().listHandouts("mark",
-                new Callback<List<Handout>>() {
-                    @Override
-                    public void success(List<Handout> handouts, Response response) {
-                        insertDataHandouts(handouts);
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Log.e(TAG, error.toString());
-                    }
-                });
-        Log.i(TAG, "getting handouts");
-    }
-
-    public void insertDataSubjects(final List<Subject> subjectsData) {
-        DatabaseManager.getInstance().executeQuery(new QueryExecutor() {
-            @Override
-            public void run(SQLiteDatabase database) {
-                SubjectDAO subjectDAO = new SubjectDAO(database, MainActivity.this);
-                subjectDAO.insertOrUpdate(subjectsData);
-                notifySubjectFragment();
-            }
-        });
-    }
 
     private void checkIfUserAuthenticated() {
         final User user = null;
@@ -204,25 +145,6 @@ public class MainActivity extends Activity
         return handouts;
     }
 
-    public void insertDataHandouts(final List<Handout> handouts) {
-
-        DatabaseManager.getInstance().executeQuery(new QueryExecutor() {
-            @Override
-            public void run(SQLiteDatabase database) {
-                HandoutsDAO handoutsDAO = new HandoutsDAO(database, MainActivity.this);
-                handoutsDAO.insertOrUpdate(getDummny());
-            }
-        });
-    }
-
-    private void notifySubjectFragment() {
-        Fragment fragment = getFragmentManager()
-                .findFragmentById(R.id.container);
-        if(fragment != null && fragment instanceof  SubjectListFragment) {
-            ((SubjectListFragment)fragment).insertData();
-        }
-    }
-
     private void searchFragment(String query){
         Fragment fragment = getFragmentManager().findFragmentById(R.id.container);
         if(fragment != null) {
@@ -237,8 +159,8 @@ public class MainActivity extends Activity
         Fragment fragment = getFragmentManager().findFragmentById(R.id.container);
         if(fragment != null) {
             if(fragment instanceof  SubjectListFragment){
-                Log.i(TAG,"searching instace subject list");
-                ((SubjectListFragment) fragment).insertData();
+                Log.i(TAG, "searching instace subject list");
+                EventBus.getDefault().post(new SubjectsLoadedEvent());
             }
         }
     }
@@ -357,90 +279,12 @@ public class MainActivity extends Activity
         } else if(name.equals(HandoutListFragment.class.getSimpleName())){
 
         }
-        /***
-         *  TODO task
-         *  1. if id exist decypt open file
-         *      else if
-         *          if updated at is greater than Time Download
-         *          updated databale
-         *          delete the unupdated file
-         *      else if
-         *          file does not exist delete data row, then go to step 2
-         *
-         *  2. if id does not exist download the file, if file sucess encrypt file and put to Db,\
-         *
-         *
-         */
-    }
-
-
-    private void startFileDownload(String url,String name) {
-//        String dirPath = Environment.getExternalStorageDirectory() + "/everlearn/" + name;
-//        DLManager.getInstance(this).dlStart(url, dirPath, new DLTaskListener() {
-//            @Override
-//            public void onProgress(int progress) {
-//                super.onProgress(progress);
-//                Log.i(TAG, progress + "");
-//            }
-//
-//            @Override
-//            public void onFinish(File file) {
-//                super.onFinish(file);
-//            }
-//
-//            @Override
-//            public void onError(String error) {
-//                super.onError(error);
-//            }
-//        });
-
     }
 
     @Override
     public void onRefresh(String name) {
         if(name.equals(SubjectListFragment.class.getSimpleName())){
-            getSubjects();
-        }
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
+            EventBus.getDefault().post(new LoadSubjectEvent());
         }
     }
 
