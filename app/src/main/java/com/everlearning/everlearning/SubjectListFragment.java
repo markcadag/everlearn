@@ -7,19 +7,28 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.everlearning.everlearning.communicator.LoadSubjectEvent;
 import com.everlearning.everlearning.communicator.OnClickList;
 import com.everlearning.everlearning.communicator.OnRefresh;
+import com.everlearning.everlearning.communicator.SubjectsLoadedEvent;
 import com.everlearning.everlearning.db.DatabaseManager;
 import com.everlearning.everlearning.db.QueryExecutor;
 import com.everlearning.everlearning.db.dao.SubjectDAO;
 import com.everlearning.everlearning.model.Subject;
-import xlistview.view.XListView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
+import xlistview.view.XListView;
 
 /**
  * A fragment representing a list of Items.
@@ -64,6 +73,18 @@ public class SubjectListFragment extends Fragment implements AbsListView.OnItemC
         return fragment;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+        EventBus.getDefault().post(new LoadSubjectEvent());
+    }
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -94,7 +115,7 @@ public class SubjectListFragment extends Fragment implements AbsListView.OnItemC
 
         mListView.setXListViewListener(this);
 
-        insertData();
+        onEvent(new SubjectsLoadedEvent());
 
         return view;
     }
@@ -125,7 +146,7 @@ public class SubjectListFragment extends Fragment implements AbsListView.OnItemC
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-            mListener.onClickList(subjects.get(position-1).getId(),TAG);
+            mListener.onClickList(subjects.get(position - 1).getId(), TAG);
         }
     }
 
@@ -148,7 +169,7 @@ public class SubjectListFragment extends Fragment implements AbsListView.OnItemC
         mOnRefresh.onRefresh(TAG);
     }
 
-    public void insertData() {
+    public void onEvent(SubjectsLoadedEvent subjectsLoadedEvent){
         DatabaseManager.getInstance().executeQuery(new QueryExecutor() {
             @Override
             public void run(SQLiteDatabase database) {
